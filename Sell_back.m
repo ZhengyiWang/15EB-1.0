@@ -10,10 +10,10 @@ function [Sellday] = Sell_back( Dayrange,Duration,Exchangeprice,Price )
 
 %如果满足条件，则返回日期；如果不满足条件，则返回EB到期日
 
-Length=length(Price);%？
+Length=length(Price);
 count=0; %用于记录满足条件的天数
 
-for Sellday=Length-Dayrange+1:Duration+Length-Dayrange %日期往后修改了一天？
+for Sellday=Length-Dayrange+1:Duration+Length-Dayrange 
     if (Price(Sellday)<Exchangeprice*0.8)
         count=count+1;
     end
