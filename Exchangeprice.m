@@ -1,4 +1,4 @@
-function [newExchangeprice,Day] = Exchangeprice( Exchangeprice,Dayrange,Duration,price)
+function [newExchangeprice,Day] = Exchangeprice( Exchangeprice,Dayrange,Duration,price,price_floor)
 %在本期可交换债券换股期内，当标的股票在任意连续20个交易日中至少10个交易日的收盘价低于当期换股价格的85%时，
 %发行人董事会有权决定换股价格是否向下修正。
 %%假设当发行方认为股票在将来无法到达换股价格时，且确实存在下修意愿时，进行下修。认为无法达到换股价格的标准可以设置为当在一定时间后股价依旧没有到达一定的金额，比如下修条款的上限
@@ -9,15 +9,14 @@ function [newExchangeprice,Day] = Exchangeprice( Exchangeprice,Dayrange,Duration
 %参数含义： Exchangeprice为原转股价格，Dayrange为判定的区间，对应20个交易日
 %Duration为需要满足的条件，对应10个交易日，price为股票价格数组
 %为了避免使函数的参数过多，因此直接将90%、85%写入函数中
-%由于估值的开始日期为3月31日，转股开始日期为6月20日，所以在检查是否满足转股条件时需要从第52天开始
+%由于估值的开始日期为3月31日，转股开始日期为6月20日，所以在检查是否满足转股条件时需要从第60天开始
 
 sum=0; %用于计算20个交易日的收盘均价
 count=0;%满足条件的交易日数
 Length=length(price); %记录总共的模拟天数
 newExchangeprice=Exchangeprice; %用来记录各转股价格
 Day=[];%开辟数组，用来记录转股价格的变化日期
-checkday=400; %D，开始准备下修的日期  %checckday,price_floor重构时应在主函数中设置
-price_floor=11.8; %l,下修价格的下限
+checkday=350; %D，开始准备下修的日期
 
 %设置换股价格为19.69肯定是基于一个长远的打算的定价。
 %对于一个年化收益率将近30%的股票，长度为3年的EB产品，前期股票价格低于转股价格属正常情况，这时发行方一般不会选择下修（实证分析验证）
