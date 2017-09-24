@@ -6,6 +6,7 @@ r1=0.065;%可交换债券的折现率，以2016年3月31日作为基准日，根
 r2=0.045;%本债券利率
 q=1.35; %抛售的天花板倍数，根据实证分析确定（存疑）
 price_floor=19.69; %换股价格的下限
+checkday=350;%开始检查下修的起始日期
 flag=0; %用于判断是否满足回售、转股、赎回条款之一，提前结束循环
 amount=600000000; %发行总金额：人民币元
 firstprice=13.1; %2016年3月31日（基准日）股价
@@ -32,7 +33,7 @@ count=0; %用来记录在赎回条款日完成换股的次数
         end
     end
     
-    [exchangeprice,Exday] = Exchangeprice(19.69,20,10,price(i,:),price_floor); %计算出各段的转股价格和转股日期
+    [exchangeprice,Exday] = Exchangeprice(19.69,20,10,price(i,:),price_floor，checkday); %计算出各段的转股价格和转股日期
       
       %计算赎回条款发生的日期D，只取第一个值。即将最终收益的计算范围缩短到赎回条款发生前。如果赎回条款不触发则D=678
       for k1=2:length(Exday) %检查k1-1段 %由于这段是后加的，为避免循环变量重名带来混乱，所以用了k1
@@ -86,7 +87,7 @@ count=0; %用来记录在赎回条款日完成换股的次数
     end
     if flag==0 %如果到最后一天都没有抛售
         n=amount/exchangeprice(k-1); 
-        payoff=n*price(i,l)*(1-0.0005)*Restriction_discount(13.10,6,0.0028,0.143)+fix(l/245+113/365)*amount*r2; %计算最后的总收入,各期的债券收入未分开计算现值
+        payoff=n*price(i,l)*(1-0.001)*Restriction_discount(13.10,6,0.0028,0.143)+fix(l/245+113/365)*amount*r2; %计算最后的总收入,各期的债券收入未分开计算现值
         pvx=payoff/(1+r1)^(l/245);
         pvy=amount*(1+3*r2)/(1+r1)^(3-113/365);
         pv(i)=max(pvx,pvy);
