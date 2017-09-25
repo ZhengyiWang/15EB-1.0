@@ -23,7 +23,7 @@ Day=[];%开辟数组，用来记录转股价格的变化日期
 %因此我假设从350天后如果股价依旧没有超过这个价格，则发行方将预期大概率难以转股，若其存在下修意图（EB偏股性），则应决定进行下修。
 %另一方面，我们认为对于转股价格应该有一个下限,本次选择11.8（从实证分析，EB下修平均幅度为23%，最低幅度为40%，本模型选择价格下限为下修40%）。一方面，发行方应该不会同意无限制的进行下修；另一方面，其手中持有的可质押股票数量也制约了其下修能力的能力
 
-for i=checkday:checkday+Dayrange-1 %由于后面要计算i-20，所以先检查前20日的股价
+for i=checkday+51:checkday+Dayrange-1+51 %由于后面要计算i-20，所以先检查前20日的股价
     if price(i)<Exchangeprice*0.85
         count=count+1;
     end
@@ -36,7 +36,7 @@ end
    end
 
     
-for i=checkday+Dayrange:Length %检查后一段时间，始终保持Dayrange内的计数和价格总和（通过减除Dayrange前数据的方式实现）
+for i=checkday+Dayrange+51:Length %检查后一段时间，始终保持Dayrange内的计数和价格总和（通过减除Dayrange前数据的方式实现）
     if price(i)<Exchangeprice*0.85
         count=count+1;
     end
